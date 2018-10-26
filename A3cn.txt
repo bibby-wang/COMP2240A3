@@ -1,0 +1,109 @@
+﻿A3
+In assignment 1, we assumed that the system had an infinite amount of memory. 
+In this assignment, the operating system has a limited amount of memory and this needs to be managed to meet process demands. 
+You will write a program to simulate a system that uses paging with virtual memory. 
+The characteristics of the system are described below:
+在作业1中，我们假设系统具有无限的内存量。
+在此分配中，操作系统具有有限的内存量，需要对其进行管理以满足流程需求。
+您将编写一个程序来模拟使用虚拟内存分页的系统。
+系统的特征描述如下：
+- Memory: The system has F frames available in main memory. 
+During execution, the processor will determine if the page required for the currently running process is in main memory.
+	a. If the page is in main memory, the processor will access the instruction and continue.
+	b. If the page is not in main memory, the processor will issue a page fault and block the process until the page has been transferred to main memory.
+	c. Initially no page is in the memory. I.e. the simulation will be strictly demand paging, where pages are only brought into main memory when they are requested.
+	d. In fixed allocation scheme frames are equally divided among processes, additional frames remain unused.
+- 内存：系统在主内存中有F帧。在执行期间，处理器将确定当前运行的进程所需的页面是否在主存储器中。
+	1.如果页面在主存储器中，处理器将访问该指令并继续。
+	2.如果页面不在主存储器中，处理器将发出页面错误并阻止该过程，直到页面已传输到主存储器。
+	3.最初没有页面在内存中。即模拟将严格要求分页，其中页面仅在请求时被带入主存储器。
+	4.在固定分配方案中，帧在进程之间平均分配，其他帧仍未使用。
+	
+- Paging and virtual memory: The system uses paging (with no segmentation).
+	a. Each process can have a maximum 50 pages where each page contains a single instruction.
+	b. For page replacement you will need to apply least recently used (LRU) and clock policy.
+	c. Resident set is managed using ‘Fixed Allocation with Local Replacement Scope’ strategy. I.e. you can assume, frames allocated to a process do not change over the simulation period and page replacements (if necessary) will occur within the allocated frames.
+	d. All pages are read-only, so no page needs to be written back to disk.
+
+- 分页和虚拟内存：系统使用分页（没有分段）。
+	1.每个进程最多可以有50页，每页包含一条指令。
+	2.对于页面替换，您需要应用最近最少使用（LRU）和时钟策略。
+	3.使用“具有本地替换范围的固定分配”策略来管理驻留集。即您可以假设，分配给流程的帧在模拟期间不会更改，并且页面替换（如果需要）将在分配的帧中发生。
+	4.所有页面都是只读的，因此不需要将页面写回磁盘。	
+- Page fault handling: When a page fault occurs, the interrupt routine will handle the fault by placing an I/O request into a queue, which will later be processed by the I/O controller to bring the page into main memory. This may require replacing a page in main memory using a page replacement policy (LRU or clock). Other processes should be scheduled to run while such an I/O operation is occurring.
+	a. Issuing a page fault and blocking a process takes no time. If a page fault occurs then another ready process can run immediately at the same time unit.
+	b. Swapping in a page takes 6 units of time (if a page required by a process is not in main memory, the process must be put into its blocked state until the required page is available).
+- 页面错误处理：当发生页面错误时，中断例程将通过将I / O请求放入队列来处理故障，该队列稍后将由I / O控制器处理以将页面带入主存储器。这可能需要使用页面替换策略（LRU或时钟）替换主存储器中的页面。应该安排其他进程在发生此类I / O操作时运行。
+	1.发出页面错误并阻止进程需要时间。如果发生页面错误，则另一个就绪进程可以在同一时间单元立即运行。
+	2.在页面中交换需要6个单位时间（如果进程所需的页面不在主内存中，则必须将进程置于其阻塞状态，直到所需页面可用为止）。
+	
+- Scheduling: The system is to use a Round Robin short-term scheduling algorithm with time a quantum of Q.
+	a. Executing a single instruction (i.e. a page) takes 1 unit of time.
+	b. Switching the processes does not take any time.
+	c. If multiple process becomes ready at the same time then they enter the ready queue in the order of their ID.
+	d. All the processes start execution at time t=0.
+	e. If a process becomes ready at time unit t then execution of that process can occur in the same time unit t without any delay.
+- 调度：系统使用循环短期调度算法，时间量为Q.
+	1.执行单个指令（即页面）需要1个单位时间。
+	2.切换流程不需要任何时间。
+	3.如果多个进程同时就绪，则它们按ID的顺序进入就绪队列。
+	4.所有进程在时间t = 0开始执行。
+	5.如果一个过程在时间单元t就绪，那么该过程的执行可以在同一时间单元t中发生而没有任何延迟。
+You are to compare the performance of the LRU and clock page replacement algorithms for the fixed allocation with local replacement strategy.
+Please use the basic versions of the policies introduced in lectures.
+您将使用本地替换策略将固定分配的LRU和时钟页面替换算法的性能进行比较。
+请使用讲座中介绍的基本版本的政策。
+Input and Output
+Input to your program should be via command line arguments, where the arguments are system configurations and the names of files that specify the execution trace of different processes. 
+All processes start execution at time 0, and are entered into the system in the order of the command line arguments (with the third argument being the earliest process). 
+输入和输出
+程序的输入应该通过命令行参数，其中参数是系统配置和指定不同进程的执行跟踪的文件的名称。
+所有进程在时间0开始执行，并按命令行参数的顺序进入系统（第三个参数是最早的进程）。
+For example:
+java mysimulator 30 3 process1.txt process2.txt process3.txt
+where 30 is the number of frames (F) and 3 is the quantum size (Q) for Round Robin algorithm and the other arguments are text file names containing page references for each process.
+其中30是帧数（F），3是Round Robin算法的量子大小（Q），其他参数是包含每个进程的页面引用的文本文件名。
+
+Since we assume that each page contains a single instruction, an execution trace is simply a page request sequence.
+由于我们假设每个页面包含单个指令，因此执行跟踪只是一个页面请求序列。
+For example: (process1.txt)
+begin
+1
+3
+2
+1
+4
+3
+end
+This specifies a process that first reads page 1, then page 3, and so on until the ‘end’ is reached.
+这指定了首先读取第1页，然后是第3页的进程，依此类推，直到达到“结束”。
+
+For each replacement strategy, the simulation should produce a summary showing, for each process, the total number of page faults, the time the page faults were generated, and the total turnaround time (including I/O time).
+对于每个替换策略，模拟应生成一个摘要，显示每个进程的页面错误总数，生成页面错误的时间以及总周转时间（包括I / O时间）。
+
+Sample inputs/outputs are provided. 
+提供样本输入/输出。
+
+Working of the first example is presented with details of different levels. 
+第一个例子的工作提供了不同级别的细节。
+
+Your code will be tested with additional inputs.
+您的代码将使用其他输入进行测试。
+Your program should output to standard output (for non-GUI solutions) or to a text area (for GUI solutions). 
+Output should be strictly in the shown output format. 
+If output is not generated in the required format then your program will be considered incorrect.
+您的程序应输出到标准输出（对于非GUI解决方案）或文本区域（对于GUI解决方案）。
+输出应严格按所示输出格式。
+如果未以所需格式生成输出，则您的程序将被视为不正确。
+User Interface:
+There are no marks allocated for using or not using a GUI – the choice is yours.
+Programming Language:
+The preferred programming language is Java.
+If you wish to use any language other than the preferred programming language, you must first notify the course demonstrator.
+Deliverable:
+1. Program source code and a README file containing compiler with version number, any special instructions required to compile and run the source code. If programmed in Java, your main class should be c9999999A3 (where c9999999 is your student number) i.e. your program can be executed by running “java c9999999A3”. If programming in other languages, your code should compile to an executable named “c9999999A3”.
+2. Brief 1 page (A4) review of how you tested your program and a comparison of the page replacement methods based on the results from your program and any interesting observations.
+2.简要1页（A4）审查您如何测试您的程序，并根据您的程序结果和任何有趣的观察结果比较页面替换方法。
+Please submit all files and the 1 page report plus a copy of the official assignment cover sheet in a ZIPPED folder through Blackboard. The folder name should be “c9999999A3” and the zip file should be name as c9999999A3.zip (where c9999999 is your student number).
+Mark Distribution:
+Mark distribution can be found in the assignment feedback document (Assign3Feedback.pdf).
