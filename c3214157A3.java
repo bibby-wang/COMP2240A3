@@ -90,7 +90,7 @@ public class c3214157A3{
 		}
 		
 		//	RRScheduling(ArrayList<Process> jobsStack,int timeQ){
-		RRScheduling runP=new RRScheduling(processList,quantumSize);
+		RRScheduling runP=new RRScheduling(processList,quantumSize,memory);
 		runP.run();
 /*
 		memory[0].addPage(3);
