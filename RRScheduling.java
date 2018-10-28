@@ -14,6 +14,7 @@ public class RRScheduling{
 	
 	private Process currentJob;	
 	private Queue<Process> readyQueue= new LinkedList<Process>();
+	private Queue<Process> blockedQueue= new LinkedList<Process>();
 	private int timeQ;
 	ArrayList<Process> jobsStack;
 	//Construction
@@ -27,9 +28,11 @@ public class RRScheduling{
 	//start running algorithm
 	public void run(){
 		int cpuTime=0;
+		
 		for (int i=0;i<jobsStack.size();i++){
 			readyQueue.offer(jobsStack.get(i));
 		}
+		
 		while(true){
 
 			if (cpuTime>50){break;}
@@ -38,23 +41,18 @@ public class RRScheduling{
 			
 			if (!readyQueue.isEmpty()){
 				//unknown
-				if (readyQueue.element().readyTime()<=cpuTime){
+				//if (readyQueue.element().readyTime()<=cpuTime){
 					currentJob=readyQueue.poll();
 			
 					//run timeQ times
 					for(int i=0;i<timeQ;i++){
-						//System.out.println("process[] times="+i+" CPU time="+cpuTime);
-						System.out.println("process["+currentJob.getID()+"] times="+(i+1)+" CPU time="+cpuTime);
-						//判断 在内存中么 不zai的话要+6 在 就直接运行q次后 放队列里 cputime
-						//
-						
-						
+						if (currentJob.getPagesListSize()>0){
+							System.out.println("process["+currentJob.getID()+"] page="+currentJob.pollPage()+" CPU time="+cpuTime);
+						}
 						
 						cpuTime++;
 					}
-				}else{
-					cpuTime++;
-				}
+
 			}else{
 				
 				cpuTime++;	

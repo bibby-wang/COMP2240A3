@@ -14,9 +14,9 @@ public class Process{
 	private int processID;
 
 	private String processName;
-	ArrayList<Integer> pagesList= new ArrayList<Integer>();
+	//ArrayList<Integer> pagesList= new ArrayList<Integer>();
+	Queue<Integer> pageQueue= new LinkedList<Integer>();
 
-	private int readyTime;
 	
 	private int turnaroundTime = 0;
 	private int waitingTime = 0;
@@ -25,41 +25,44 @@ public class Process{
 	
 	
 	//Construction
-	Process(int processID,String processName,ArrayList<Integer> pagesList){
+	Process(int processID,String processName,Queue<Integer> pageQueue){
 		this.processID=processID;
 		this.processName=processName;
-		this.pagesList = pagesList;
+		this.pageQueue = pageQueue;
+		
 	}
 
 	// get page number 	
-	public int getPage(int index){
-		return pagesList.get(index);
+	public int pollPage(){
+		return pageQueue.poll();
+	}
+	
+	// get page number 	
+	public int pollPage(){
+		return pageQueue.element();
 	}
 		
-	// get pagesList	
-	public ArrayList<Integer> getPagesList(){
-		return pagesList;
+	// get pageQueue	
+	public Queue<Integer> getPageQueue(){
+		return pageQueue;
 	}
 	// get pages list size
-	public int getPagesListSize(){
-		return pagesList.size();
+	public int getPageQueueSize(){
+		return pageQueue.size();
 	}
-	// get time of process ready	
-	public int readyTime(){
-		return readyTime;
-	}
-	// set next ready time of process	
-	public void setReadyTime(int time){
-		readyTime=time;
-	}		
+
+
+
 	
 	// get id of process	
 	public int getID(){
 		return processID;
 	}
+	
 	public String getFaultTimes(){
 		return faultTimes;
 	}
+	
 	public void getFaultTimes(String data){
 		faultTimes+=data+",";
 	}

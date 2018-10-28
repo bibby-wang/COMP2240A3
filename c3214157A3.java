@@ -38,7 +38,7 @@ public class c3214157A3{
 
 		FileReader fileReader = null;
 		BufferedReader bufferedReader = null;
-		ArrayList<Integer> pagesList = new ArrayList<Integer>();
+		Queue<Integer> pageQueue = new LinkedList<Integer>();
 			//start loading data from file
 			try{
 				
@@ -58,14 +58,14 @@ public class c3214157A3{
 					int pageNumber = Integer.parseInt(dataIn.next());
 
 					// save data into pages list
-					pagesList.add(pageNumber);
+					pageQueue.offer(pageNumber);
 
 				}
 
 			}catch (FileNotFoundException e){  
                e.printStackTrace();  
 			} 
-			Process process = new Process(i+1,args[i+2],pagesList);				
+			Process process = new Process(i+1,args[i+2],pageQueue);				
 			processList.add(process);
 			
 
