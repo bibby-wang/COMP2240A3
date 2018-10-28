@@ -12,13 +12,16 @@ import java.util.*;
 public class Process{
 
 	private int processID;
+
 	private String processName;
 	ArrayList<Integer> pagesList= new ArrayList<Integer>();
 
-
+	private int readyTime;
 	
 	private int turnaroundTime = 0;
 	private int waitingTime = 0;
+	private int faults = 0;
+	private String faultTimes;
 	
 	
 	//Construction
@@ -41,11 +44,24 @@ public class Process{
 	public int getPagesListSize(){
 		return pagesList.size();
 	}
-		
+	// get time of process ready	
+	public int readyTime(){
+		return readyTime;
+	}
+	// set next ready time of process	
+	public void setReadyTime(int time){
+		readyTime=time;
+	}		
 	
 	// get id of process	
 	public int getID(){
 		return processID;
+	}
+	public String getFaultTimes(){
+		return faultTimes;
+	}
+	public void getFaultTimes(String data){
+		faultTimes+=data+",";
 	}
 	
 	// get name of process	

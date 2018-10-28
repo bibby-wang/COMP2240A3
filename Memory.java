@@ -18,15 +18,23 @@ public class Memory{
 		this.frameList = new ArrayList<Integer>(size);
 	}
 	// add page into frameList
-	public void addPage(int page){
-		frameList.add(page);
+	public boolean addPage(int page){
+		if(frameList.size()<memorySize){
+			frameList.add(page);
+			return true;
+		}
+		return false;
+	}
+	// set page into frameList(index)
+	public void setPage(int index,int page){
+		frameList.set(index,page);
 	}
 		
 	// get frameList	
 	public ArrayList<Integer> getFrameList(){
 		return frameList;
 	}
-	// get momery size
+	// get memory size
 	public int size(){
 		return memorySize;
 	}
@@ -36,19 +44,29 @@ public class Memory{
 	}
 		
 	
-	// get page	
+	// get page	by index
 	public int getPage(int index){
 		return frameList.get(index);
 	}
 	
+	// get page	
+	public ArrayList<Integer> getAll(){
+		return frameList;
+	}
+		
 	// check the page is in memory	
-	public boolean isPageIn(int page){
+	public boolean hasPage(int page){
 		for(int i=0;i<frameList.size();i++){
 			if (frameList.get(i)==page){
 				return true;
 			}
 		}
 		return false;
+	}
+	// check is memory space full 	
+	public boolean isFull(){
+		if (frameList.size()< memorySize){return false;}
+		return true;
 	}
 		
 }
