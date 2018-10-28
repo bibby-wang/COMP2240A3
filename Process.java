@@ -38,7 +38,7 @@ public class Process{
 	}
 	
 	// get page number 	
-	public int pollPage(){
+	public int elementPage(){
 		return pageQueue.element();
 	}
 		

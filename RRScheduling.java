@@ -46,13 +46,15 @@ public class RRScheduling{
 			
 					//run timeQ times
 					for(int i=0;i<timeQ;i++){
-						if (currentJob.getPagesListSize()>0){
-							System.out.println("process["+currentJob.getID()+"] page="+currentJob.pollPage()+" CPU time="+cpuTime);
+						if (currentJob.getPageQueueSize()>0){
+							System.out.println("p["+currentJob.getID()+"] page="+currentJob.pollPage()+" CPU time="+cpuTime);
+							cpuTime++;
 						}
 						
-						cpuTime++;
 					}
-
+					if (currentJob.getPageQueueSize()>0){
+						readyQueue.offer(currentJob);
+					}
 			}else{
 				
 				cpuTime++;	
