@@ -20,7 +20,7 @@ public class Process{
 	Queue<Integer> pageQueue= new LinkedList<Integer>();
 
 	
-	private int turnaroundTime = 0;
+	private int turnaroundTime = -1;
 	private int waitingTime = 0;
 	private int faults = 0;
 	private String faultTimes="";
@@ -85,7 +85,7 @@ public class Process{
 	}
 	//
 	public void setTurnaroundTime(int time){
-		turnaroundTime=time+1;
+		if (turnaroundTime<0) {turnaroundTime=time;}
 	}
 	//
 	public int turnaroundTime(){

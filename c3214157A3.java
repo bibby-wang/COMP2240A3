@@ -2,7 +2,7 @@
 // - School of Electrical Engineering and Computer Science
 // - COMP2240 Operating Systems
 // - Assignment 3
-// - simulate a system that uses paging with virtual memory
+// - simulate a system that uses paging with virtual memoryLRU
 // - Name: Binbin Wang
 // - Student No: 3214157
 // - Date: 31-10-2018
@@ -84,48 +84,31 @@ public class c3214157A3{
 			//equally divided number of frames allocated to each process
 			framesNumber /= processList.size();
 			//System.out.println("framesNumber="+framesNumber);
-			Memory[] memory = new Memory[processList.size()]; 
+			LRUMemory[] memoryLRU = new LRUMemory[processList.size()]; 
+			ClockMemory[] memoryClock = new ClockMemory[processList.size()]; 
 			
 			for (int i=0;i<processList.size();i++){
-				memory[i]= new Memory(framesNumber);
+				memoryLRU[i]= new LRUMemory(framesNumber);
+				memoryClock[i]= new ClockMemory(framesNumber);
 			}
 			
 			//	RRScheduling(ArrayList<Process> jobsStack,int timeQ){
-			RRScheduling runP=new RRScheduling(processList,quantumSize,memory);
+			
 			if (k==0){
-				runP.run(true);
+				RRSchedulingLRU runLRU=new RRSchedulingLRU(processList,quantumSize,memoryLRU);
+				runLRU.run();
+				
 			}else{
-				runP.run(false);
+				System.out.println("------------------------------------------------------------");
+				System.out.println("");
+
+
+				//runClock.run(true);
 			}
 		
 	
 		}
-/*
-		memory[0].addPage(3);
-		System.out.println("04=yes="+memory[0].getframeListSize());
-		System.out.println("04=yes="+memory[0].size());
-		memory[0].addPage(4);
-		memory[1].addPage(3);
-		if(memory[0].hasPage(9)){
-			System.out.println("=no9="+memory[0].getframeListSize());
-		}
-		memory[0].setPage(0,9);
 
-		if(memory[0].hasPage(9)){
-			System.out.println("=yes=9="+memory[0].getPage(0)+"=1="+memory[0].getPage(2));
-
-		}
-		if(memory[0].hasPage(3)){
-			System.out.println("03=yes=");
-		}
-		if(memory[1].hasPage(4)){
-			System.out.println("14=yes=");
-		}
-		if(memory[1].hasPage(3)){
-			System.out.println("13=yes=");
-		}
-*/
-		
 	}
 
 }

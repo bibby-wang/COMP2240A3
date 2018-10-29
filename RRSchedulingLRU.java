@@ -10,25 +10,28 @@
 // - Date: 31-10-2018
 
 import java.util.*;
-public class RRScheduling{
+public class RRSchedulingLRU{
 	
 	private Process currentJob;	
 	private LinkedList<Process> readyQueue= new LinkedList<Process>();
-	//private Queue<Process> blockedQueue= new LinkedList<Process>();
+
+
 	private int timeQ;
 	boolean loopFlg=true;
-	Memory[] memory;
+	LRUMemory[] memory;
 	ArrayList<Process> jobsStack;
+	
 	//Construction
-	public RRScheduling(ArrayList<Process> jobsStack,int timeQ,Memory[] memory){
+	public RRSchedulingLRU(ArrayList<Process> jobsStack,int timeQ,LRUMemory[] memory){
 		this.jobsStack=jobsStack;;
 		this.timeQ=timeQ;
 		this.memory=memory;
 	
 	}
 
+
 	//start running algorithm
-	public void run(boolean type){
+	public void run(){
 		int cpuTime=0;
 		int ptimeQ=timeQ;
 		for (int i=0;i<jobsStack.size();i++){
@@ -40,44 +43,34 @@ public class RRScheduling{
 		}
 		cpuTime++;
 		while(loopFlg){
-			//System.out.println("["+cpuTime+"]");
+			System.out.println("["+cpuTime+"]");
 			
 			loopFlg=false;
 			for (int i=0;i<jobsStack.size();i++){
 				if (jobsStack.get(i).hasJobs()){
 					loopFlg=true;
+				}else{
+					jobsStack.get(i).setTurnaroundTime(cpuTime);
 				}
 			}
-			
-			
-			
-			
+
 			//
 			for (int i=0;i<jobsStack.size();i++){
-				
+				System.out.println("m"+i);
+				memory[i].printMemory();
 				if( jobsStack.get(i).readyTime()==cpuTime && jobsStack.get(i).hasJobs() ){
 					readyQueue.offer(jobsStack.get(i));
 					
 
 					int pageNum=jobsStack.get(i).elementPage();
 					if(!memory[i].addPage(pageNum)){
-						//System.out.print("======full=> ");
-						// type true for LRU, false for Clock
-						if(type){
-							//System.out.println("type:LRU");
-							//LRU
-							memory[i].addByLRU(pageNum);
+						//System.out.println("["+i+"]");
 
-							
-						}else{
-							System.out.println("type:Clock");
-							//Clock 
-							
-							
-						}
-						//System.out.println("==========");
+						memory[i].addByLRU(pageNum);
+
+
 					}
-					//System.out.println("p"+i+" addtime="+cpuTime);
+
 					
 				}
 			}			
@@ -87,7 +80,7 @@ public class RRScheduling{
 			
 				int	cID=currentJob.getID()-1;
 				currentJob.pollPage();
-				//System.out.println("["+cpuTime+"]"+"=p["+currentJob.getID()+"]: ");
+
 				//
 				if(currentJob.hasJobs()){
 					if (memory[cID].hasPage(currentJob.elementPage())){
@@ -95,7 +88,7 @@ public class RRScheduling{
 							readyQueue.addFirst(currentJob);
 							ptimeQ--;
 						}else{
-							ptimeQ=3;
+							ptimeQ=timeQ;
 							readyQueue.offer(currentJob);
 						}
 						
@@ -111,13 +104,23 @@ public class RRScheduling{
 
 
 			cpuTime++;
-		}		
-		
+		}
+
+		System.out.println("LRU - Fixed:");
+		System.out.println("PID   Process Name      Turnaround Time     #Faults   Fault Times");
+			
+
 		for (int i=0;i<jobsStack.size();i++){
-			System.out.println("["+i+"]"+jobsStack.get(i).getFaultTimes());
+			int PID=i+1;
+			String name=jobsStack.get(i).getName();
+			int faults=jobsStack.get(i).faults();
+			int turnaroundTime=jobsStack.get(i).turnaroundTime();
+			String timelist=jobsStack.get(i).getFaultTimes();
+			timelist=timelist.substring(0,timelist.length()-1);
+			System.out.println(PID+"     "+name+"      "+ turnaroundTime+"                 "+faults+"        {"+timelist+"}");
 			
 		}
-		
+		System.out.println("");
 	}
 
 

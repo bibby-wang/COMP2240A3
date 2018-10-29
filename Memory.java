@@ -10,15 +10,14 @@ import java.util.*;
 public class Memory{
 
 	private int memorySize;
-	private ArrayList<Integer> frameList;//store pages from process 
+	public ArrayList<Integer> frameList;//store pages from process 
 
 	
 	//Construction
 	Memory(int size){
 		this.memorySize=size;
 		this.frameList = new ArrayList<Integer>(size);
-		
-	
+
 	}
 	
 	// add page into frameList
@@ -29,35 +28,14 @@ public class Memory{
 		}
 		return false;
 	}
-	public void sink(int i){
-		int page=frameList.get(i);
-		int end=frameList.size()-1;
-		for(int j=i;j<end;j++){
-			int next=j+1;
-			frameList.set(j,frameList.get(next));
-		}
-		frameList.set(end,page);
-	}
-	//LRU
-	public void addByLRU(int page){
-		
-
-		this.setPage(0,page);
-		this.sink(0);
-		//printMemory();
-	}
 	
-	//Clock
-	public void addByClock(int page){
-		
-		this.setPage(0,page);
-		this.sink(0);
-		printMemory();
-	}
-	
-	private void printMemory(){
-		for(int i=memorySize-1;i>=0;i--){
-			System.out.println(i+" =page["+frameList.get(i)+"]");
+	public void printMemory(){
+		// for(int i=memorySize-1;i>=0;i--){
+			// System.out.println(i+" =page["+frameList.get(i)+"]");
+		// }
+		System.out.println("Memory: =============================");
+		for (Integer i : frameList) {
+			System.out.println("page num" + i);
 		}
 		System.out.println("=============================");
 	}
@@ -91,16 +69,6 @@ public class Memory{
 		return frameList;
 	}
 		
-	// check the page is in memory	
-	public boolean hasPage(int page){
-		for(int i=0;i<frameList.size();i++){
-			if (frameList.get(i)==page){
-				this.sink(i);
-				return true;
-			}
-		}
-		return false;
-	}
 	// check is memory space full 	
 	public boolean isFull(){
 		if (frameList.size()< memorySize){return false;}
