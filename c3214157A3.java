@@ -91,7 +91,7 @@ public class c3214157A3{
 		
 		//	RRScheduling(ArrayList<Process> jobsStack,int timeQ){
 		RRScheduling runP=new RRScheduling(processList,quantumSize,memory);
-		runP.run();
+		runP.run(true);
 /*
 		memory[0].addPage(3);
 		System.out.println("04=yes="+memory[0].getframeListSize());

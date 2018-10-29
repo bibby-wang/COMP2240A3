@@ -12,7 +12,9 @@ import java.util.*;
 public class Process{
 
 	private int processID;
+	private int readyTime;
 
+	
 	private String processName;
 	//ArrayList<Integer> pagesList= new ArrayList<Integer>();
 	Queue<Integer> pageQueue= new LinkedList<Integer>();
@@ -21,7 +23,7 @@ public class Process{
 	private int turnaroundTime = 0;
 	private int waitingTime = 0;
 	private int faults = 0;
-	private String faultTimes;
+	private String faultTimes="";
 	
 	
 	//Construction
@@ -50,21 +52,44 @@ public class Process{
 	public int getPageQueueSize(){
 		return pageQueue.size();
 	}
+	// is process has more Jobs
+	public boolean hasJobs(){
+		return !pageQueue.isEmpty();
+	}
 
-
-
-	
 	// get id of process	
 	public int getID(){
 		return processID;
 	}
-	
+	//
 	public String getFaultTimes(){
 		return faultTimes;
 	}
-	
-	public void getFaultTimes(String data){
+	//
+	public void setFaultTime(String data){
 		faultTimes+=data+",";
+	}
+	//	
+	public void setFaultTime(int time){
+		readyTime=time+6;
+		this.setFaultTime(Integer.toString(time));
+		faults++;
+	}
+	//
+	public int readyTime(){
+		return readyTime;
+	}
+	//
+	public int faults(){
+		return faults;
+	}
+	//
+	public void setTurnaroundTime(int time){
+		turnaroundTime=time+1;
+	}
+	//
+	public int turnaroundTime(){
+		return turnaroundTime;
 	}
 	
 	// get name of process	

@@ -13,10 +13,10 @@ import java.util.*;
 public class RRScheduling{
 	
 	private Process currentJob;	
-	private Queue<Process> readyQueue= new LinkedList<Process>();
-	private Queue<Process> blockedQueue= new LinkedList<Process>();
+	private LinkedList<Process> readyQueue= new LinkedList<Process>();
+	//private Queue<Process> blockedQueue= new LinkedList<Process>();
 	private int timeQ;
-	boolean blocked=true;
+	boolean loopFlg=true;
 	Memory[] memory;
 	ArrayList<Process> jobsStack;
 	//Construction
@@ -26,60 +26,93 @@ public class RRScheduling{
 		this.memory=memory;
 	
 	}
-//readyQueue.offer()//in
-//jobsQueue.poll()//out
-	//start running algorithm
-	public void run(){
-		int cpuTime=6;
-		
-		for (int i=0;i<jobsStack.size();i++){
-			readyQueue.offer(jobsStack.get(i));
-			memory[i].addPage(jobsStack.get(i).elementPage());
-		}
-		
-		while(true){
 
-			if (cpuTime>50){break;}
+	//start running algorithm
+	public void run(boolean type){
+		int cpuTime=0;
+		int ptimeQ=timeQ;
+		for (int i=0;i<jobsStack.size();i++){
+			if (memory[i].hasPage(jobsStack.get(i).elementPage())){
+				readyQueue.offer(jobsStack.get(i));
+			}else{
+				jobsStack.get(i).setFaultTime(cpuTime);
+			}
+		}
+		cpuTime++;
+		while(loopFlg){
+			System.out.println("["+cpuTime+"]");
+			
+			loopFlg=false;
+			for (int i=0;i<jobsStack.size();i++){
+				if (jobsStack.get(i).hasJobs()){
+					loopFlg=true;
+				}
+			}
 			
 			
 			
-			if (!readyQueue.isEmpty()){
-				//unknown
-				//if (readyQueue.element().readyTime()<=cpuTime){
-					currentJob=readyQueue.poll();
-					int cID=currentJob.getID()-1;
+			
+			//
+			for (int i=0;i<jobsStack.size();i++){
+				
+				if( jobsStack.get(i).readyTime()==cpuTime && jobsStack.get(i).hasJobs() ){
+					readyQueue.offer(jobsStack.get(i));
 					
-					//run timeQ times
-					for(int i=0;i<timeQ;i++){
-						
-						
-						if (currentJob.getPageQueueSize()>0){
-							
-							if (memory[cID].hasPage(currentJob.elementPage())){
-								System.out.println("p["+currentJob.getID()+"] page="+currentJob.pollPage()+" CPU time="+cpuTime);
-								blocked=false;
-								cpuTime++;
-							}
-							else{
-								//not in memory!!
-								System.out.println("p["+currentJob.getID()+"] page="+currentJob.elementPage()+" CPU time="+cpuTime+" no in memony");
-								blocked=true;
-								break;
-							}
-							
+
+					int pageNum=jobsStack.get(i).elementPage();
+					if(!memory[i].addPage(pageNum)){
+						System.out.println("full");
+						if(type){
+							System.out.println("type:T");
+							//
+						}else{
+							System.out.println("type:F");
+							//
 						}
 						
 					}
-					if (currentJob.getPageQueueSize()>0 && !blocked){
-						readyQueue.offer(currentJob);
-					}
-			}else{
+					//System.out.println("p"+i+" addtime="+cpuTime);
+					
+				}
+			}			
+			//
+			if (!readyQueue.isEmpty()){
+				currentJob=readyQueue.poll();
+			
+				int	cID=currentJob.getID()-1;
 				
-				cpuTime++;	
+				System.out.println("["+cpuTime+"]"+"=p["+currentJob.getID()+"]: "+currentJob.pollPage());
+				//
+				if(currentJob.hasJobs()){
+					if (memory[cID].hasPage(currentJob.elementPage())){
+						if(ptimeQ>1 && currentJob.hasJobs()){
+							readyQueue.addFirst(currentJob);
+							ptimeQ--;
+						}else{
+							ptimeQ=3;
+							readyQueue.offer(currentJob);
+						}
+						
+					}else{
+						System.out.println("+"+cpuTime+" to "+currentJob.getID());
+						currentJob.setFaultTime(cpuTime+1);
+						
+					}
+				}
+				
 			}
 			
+
+
+			cpuTime++;
+		}		
 		
+		for (int i=0;i<jobsStack.size();i++){
+			System.out.println("["+i+"]"+jobsStack.get(i).getFaultTimes());
+			
 		}
+		
 	}
+
 
 }
