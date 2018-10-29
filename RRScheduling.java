@@ -40,7 +40,7 @@ public class RRScheduling{
 		}
 		cpuTime++;
 		while(loopFlg){
-			System.out.println("["+cpuTime+"]");
+			//System.out.println("["+cpuTime+"]");
 			
 			loopFlg=false;
 			for (int i=0;i<jobsStack.size();i++){
@@ -61,15 +61,23 @@ public class RRScheduling{
 
 					int pageNum=jobsStack.get(i).elementPage();
 					if(!memory[i].addPage(pageNum)){
-						System.out.println("full");
+						System.out.print("======full=> ");
+						// type true for LRU, false for Clock
 						if(type){
-							System.out.println("type:T");
-							//
+							System.out.println("type:T,LRU");
+							//LRU
+							//System.out.println("pang: " + pageNum);
+							System.out.println("memory: " + i);
+							memory[i].addByLRU(pageNum);
+
+							
 						}else{
-							System.out.println("type:F");
-							//
+							System.out.println("type:F,Clock");
+							//Clock 
+							
+							
 						}
-						
+						//System.out.println("==========");
 					}
 					//System.out.println("p"+i+" addtime="+cpuTime);
 					
@@ -80,8 +88,8 @@ public class RRScheduling{
 				currentJob=readyQueue.poll();
 			
 				int	cID=currentJob.getID()-1;
-				
-				System.out.println("["+cpuTime+"]"+"=p["+currentJob.getID()+"]: "+currentJob.pollPage());
+				currentJob.pollPage();
+				//System.out.println("["+cpuTime+"]"+"=p["+currentJob.getID()+"]: ");
 				//
 				if(currentJob.hasJobs()){
 					if (memory[cID].hasPage(currentJob.elementPage())){
@@ -94,7 +102,7 @@ public class RRScheduling{
 						}
 						
 					}else{
-						System.out.println("+"+cpuTime+" to "+currentJob.getID());
+						//System.out.println("+"+cpuTime+" to "+currentJob.getID());
 						currentJob.setFaultTime(cpuTime+1);
 						
 					}

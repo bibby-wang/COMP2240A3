@@ -11,20 +11,45 @@ public class Memory{
 
 	private int memorySize;
 	private ArrayList<Integer> frameList;//store pages from process 
-
+	private int[] usedTime;
+	private int usedTimeIndex;
+	
 	//Construction
 	Memory(int size){
 		this.memorySize=size;
 		this.frameList = new ArrayList<Integer>(size);
+		usedTime=new int[size];
+		for(int i=0;i<size;i++){usedTime[i]=0;}
 	}
+	
 	// add page into frameList
 	public boolean addPage(int page){
 		if(frameList.size()<memorySize){
 			frameList.add(page);
+			//int i=frameList.indexOf(page);
+			//usedTime[i]++;
 			return true;
 		}
 		return false;
 	}
+	
+	//LRU
+	public void addByLRU(int page){
+		
+		int minIndex=0;
+		for(int i=0;i<usedTime.length;i++){
+			System.out.println(i+"=used= "+usedTime[i]+" =page["+frameList.get(i)+"] start: "+minIndex);
+			if (usedTime[minIndex] > usedTime[i]){
+				minIndex = i;
+				
+			}
+		}
+		usedTime[minIndex]=1;
+		//System.out.println("==minIndex: "+minIndex+"=="+usedTime[minIndex]+" #page: "+page+"=");
+		System.out.println("==================================================");
+		this.setPage(minIndex,page);
+	}
+	
 	// set page into frameList(index)
 	public void setPage(int index,int page){
 		frameList.set(index,page);
@@ -58,6 +83,8 @@ public class Memory{
 	public boolean hasPage(int page){
 		for(int i=0;i<frameList.size();i++){
 			if (frameList.get(i)==page){
+				//used time ++
+				usedTime[i]++;
 				return true;
 			}
 		}
