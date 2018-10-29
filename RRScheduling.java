@@ -61,18 +61,16 @@ public class RRScheduling{
 
 					int pageNum=jobsStack.get(i).elementPage();
 					if(!memory[i].addPage(pageNum)){
-						System.out.print("======full=> ");
+						//System.out.print("======full=> ");
 						// type true for LRU, false for Clock
 						if(type){
-							System.out.println("type:T,LRU");
+							//System.out.println("type:LRU");
 							//LRU
-							//System.out.println("pang: " + pageNum);
-							System.out.println("memory: " + i);
 							memory[i].addByLRU(pageNum);
 
 							
 						}else{
-							System.out.println("type:F,Clock");
+							System.out.println("type:Clock");
 							//Clock 
 							
 							
