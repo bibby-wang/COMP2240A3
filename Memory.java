@@ -35,9 +35,8 @@ public class Memory{
 		// }
 		System.out.println("Memory: =============================");
 		for (Integer i : frameList) {
-			System.out.println("page num" + i);
+			System.out.println("page num: " + i);
 		}
-		System.out.println("=============================");
 	}
 	
 	// set page into frameList(index)

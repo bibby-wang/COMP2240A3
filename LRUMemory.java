@@ -31,7 +31,7 @@ public class LRUMemory extends Memory{
 		super.setPage(0,page);
 		this.sink(0);
 		//super.printMemory();
-		//printMemory();
+	
 	}
 
 	// check the page is in memory	
@@ -39,11 +39,12 @@ public class LRUMemory extends Memory{
 		
 		for(int i=0;i<frameList.size();i++){
 			if (frameList.get(i)==page){
+				//move the page to end of list
 				this.sink(i);
 				return true;
 			}
 		}
-		//super.printMemory();
+		
 		return false;
 	}
 

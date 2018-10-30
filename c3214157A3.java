@@ -102,8 +102,8 @@ public class c3214157A3{
 				System.out.println("------------------------------------------------------------");
 				System.out.println("");
 
-
-				//runClock.run(true);
+				RRSchedulingClock runClock=new RRSchedulingClock(processList,quantumSize,memoryClock);
+				runClock.run();
 			}
 		
 	
